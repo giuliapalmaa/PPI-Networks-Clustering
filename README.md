@@ -1,4 +1,4 @@
-# Clustering Algorithm for PPI Networks
+# Modularity Optimization for PPI Networks
 
 
 
