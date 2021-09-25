@@ -26,3 +26,4 @@ In totale ci sono +++++ nodi, che, separati tra loro da uno spazio, formano ++++
 
 
 
+
