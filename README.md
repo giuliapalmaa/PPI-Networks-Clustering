@@ -1,4 +1,4 @@
-# Modularity Optimization for PPI Networks
+# Protein-Protein Interaction Clustering
 
 
 
