@@ -112,7 +112,7 @@ JavaPairRDD<String,Integer> archettiridotto = archetti.reduceByKey((x,y)-> x+y);
 ```
 
 ## Edge-Betweenness e Modularità
-Successivamente l'algoritmo calcola per ogni arco il valore di betweenness centrality:
+Successivamente l'algoritmo calcola per ogni arco il valore di **betweenness centrality**:
 
 ```java
 Long totarchetti = archettiridotto.count();
@@ -120,9 +120,9 @@ Long totarchetti = archettiridotto.count();
 JavaPairRDD<Float,String> BCeOrdinato = archettiridotto.mapToPair(x->new Tuple2 ((float) x._2/totarchetti,x._1.split(",")[0] + " " + x._1.split(",")[1])).sortByKey(false);
 ```
 
-Si aggiorna il nostro dataset andando ad eliminare l'arco con il valore di BC(e) maggiore, si calcola l'indice Q e si ripete l'algoritmo. 
+Si elimina l'arco con il valore di BC(e) maggiore, si aggiorna il dataset, si calcola l'indice Q e si ripete l'algoritmo. 
 
-L'indice Q va a misurare la modularità del grafo, ovvero la qualità della suddivisione delle proteine in cluster a seconda delle loro interazioni. Un valore di Q prossimo all'1 indica una suddivisione buona, dove le proteine più connesse si trovano all'interno dello stesso cluster e sono debolmente inter-connessi con i nodi degli altri moduli della rete.
+L'indice Q va a misurare la modularità del grafo, ovvero la qualità della suddivisione delle proteine in cluster a seconda delle loro interazioni. Un valore di Q prossimo all'1 indica una suddivisione buona, dove le proteine più connesse si trovano all'interno dello stesso cluster, ma sono debolmente connesse con i nodi delle altre comunità della rete.
 
 ```java
 JavaPairRDD<String,Float> conta = assegnoClusterB.flatMapToPair(new ComputaCluster()).reduceByKey((x,y)-> x+y).sortByKey().mapToPair(x->{
@@ -136,7 +136,7 @@ JavaPairRDD<String,Float> conta = assegnoClusterB.flatMapToPair(new ComputaClust
 Float Q = conta.values().reduce((x,y)->x+y);
 ```
 
-Per il calcolo di Q è stato necessario attribuire ad ogni nodo il cluster di appartenenza per individuare gli archi intra ed extra cluster. Questo è stato fatto con una serie di trasformazioni che vertono sugli archi dell'adjacency list che alla fine del Forward-MR presentano il colore WHITE, questi sono quelli in cui nodo e root non entrano in contatto, e quindi si trovano in cluster diversi.
+Per il calcolo di Q bisogna conoscere il cluster di appartenenza di ogni nodo di un arco, così da discernere archi i cui nodo fanno parte dello stesso cluster e archi i cui nodi connettono due comunità distinte. Per fare ciòabbiamo applicato agli archi il cui colore è rimasto WHITE una serie di trasformazioni (i nodi di questi archi si trovano in cluster diversi per definizione):
 
 ```java
 JavaPairRDD<String,String> passo1 = finale.filter(x->x._2.split(" ")[2].equalsIgnoreCase("WHITE")).sortByKey().mapToPair(x-> new Tuple2<String,String> (x._1.split(" ")[0],x._1.split(" ")[1])).reduceByKey((x,y)->x+" "+y);
