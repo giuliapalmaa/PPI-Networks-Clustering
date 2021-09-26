@@ -39,7 +39,9 @@ DatasetPiccolo | Drosophila Melanogaster
 
 ## Preparazione file di input
 
-
+Per l'utilizzo dei dataset sia in Java sia in Neo4J sono state apportate delle modifiche al dataset di partenza.
+Su Excel abbiamo eliminato tutte le colonne diverse dai due nodi di interazione. Il risultato è una lista di archi con i nodo di interazione separati da uno spazio. 
+Attraverso l'interfaccia EstrapolaNodi abbiamo creato un file contenente la lista dei nodi, che è richiesta, insieme alla lista degli archi, per la creazione del grafo in Neo4J. 
 
 
 ## Creazione Adjacency List
