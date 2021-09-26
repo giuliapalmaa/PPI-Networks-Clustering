@@ -4,7 +4,8 @@
 
 Le associazioni fisiche tra proteine sono oggetto di interesse medico principalmente per due aspetti: un interesse sulla *fisiologia* del corpo e un aspetto *patologico*. Il primo approccio cerca di individuare i pattern che si creano tra proteine interagenti e i conseguenti processi biologici che avvengono all'interno di cellule; il secondo cerca le interazioni con le proteine che sono "viziate" (proteine intatte ma la cui genesi non si è svolta correttamente): queste interagiscono con altre proteine viziate, tendono a legarsi e a creare patologie all'interno dell'organismo.  
 L'obiettivo è scoprire le strutture di clustering nella rete PPI, cioè determinare una struttura di cluster di proteine in cui ogni proteina è più vicina alle altre all'interno dello stesso insieme rispetto alle proteine al di fuori dell'insieme.  
-Non solo per l'importanza di questi studi ma anche per la loro complessità il cercare le interazioni tra proteine (Protein-Protein Interactions, *PPI*) è un compito molto stimolante e impegnativo.  Molti infatti sono gli algoritmi scritti, di cui uno dei più popolari è quello per la edge-betweeness di Girvan-Newmans, che ci dà una misura di importanza per ogni arco. Questo progetto propone una nuova implementazione di quest'ultimo, e successivamente analizza la struttura in cluster tramite la modularità (indice Q). Ci siamo basati sull'articolo "A MapReduce-Based Parallel Clustering Algorithm for Large Protein-Protein Interaction Networks", di Li Liu e altri. 
+Non solo per l'importanza di questi studi ma anche per la loro complessità, il cercare le interazioni tra proteine (Protein-Protein Interactions, *PPI*) è un compito molto stimolante e impegnativo.  Molti infatti sono gli algoritmi scritti, di cui uno dei più popolari è quello per l'edge-betweeness di Girvan-Newmans.  
+Questo progetto propone una nuova implementazione di quest'ultimo, e successivamente analizza la struttura in cluster tramite la modularità (indice Q). Ci siamo basati sull'articolo "A MapReduce-Based Parallel Clustering Algorithm for Large Protein-Protein Interaction Networks", di Li Liu e altri. 
 L'algoritmo è implementato in *java-Spark*, con il paradigma Map-Reduce. Inoltre alcuni risultati di questo algoritmo verranno visualizzati con un database NoSQL *Neo4J*.
 
 ## I Dataset
@@ -33,15 +34,15 @@ Il dataset Drosophila Melanogaster è composto da 284 nodi e 297 archi.
 
 [Dataset Neo4J](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j)| Contenuto
 ------------ | -------------
-[archiBest](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/archiBest.csv) | file con lista degli archi del dataset con miglire modularità
+[archiBest](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/archiBest.csv) | file con lista degli archi del dataset con migliore modularità
 [archiFirst](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/archiFirst.csv) | file con lista degli archi del dataset iniziale
 [archiLast](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/archiLast.csv) | file con lista degli archi del dataset all'ultima iterazione dell'algoritmo
 [nodiBesteFirst](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/nodiBesteFirst.csv) | file con lista dei nodi del dataset iniziale e con migliore modularità
 [nodiLast](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/nodiLast.csv) | file con lista dei nodi del dataset all'ultima iterazione dell'algoritmo
 
 ## Importazione
-Per poter importare i dataset sia in *Java* sia in *Neo4J* sono state apportate delle modifiche al file di partenza:  
-Su *Excel* abbiamo eliminato tutte le colonne diverse dai due nodi di interazione. Il risultato è una lista di archi con i nodo di interazione separati da uno spazio.  
+Per poter importare i dataset sia in *Java* sia in *Neo4J* sono state apportate delle modifiche ai file di partenza:  
+Su *Excel* abbiamo eliminato tutte le colonne diverse dai due nodi di interazione. Il risultato è una lista di archi con i nodi di interazione separati da uno spazio.  
 Per l'importazione in *Neo4J* i file sono stati trasformati in *csv*. Attraverso l'interfaccia [EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) abbiamo ottenuto la lista dei nodi che è richiesta, insieme alla lista degli archi, per la creazione del grafo in *Neo4J*
 
 ## Preparazione file di input
@@ -50,13 +51,12 @@ Per l'importazione in *Neo4J* i file sono stati trasformati in *csv*. Attraverso
 ### Creazione Adjacency List
 
 L'algoritmo Clustering-MR lavora su una tabella composta da *nxn* righe (dove n è il numero di nodi distinti che compongono il grafo). Questa tabella viene definita **Adjacency List** ed ogni record è registrato mediante una coppia Chiave,Valore.   
-La chiave è composta dall'ID del nodo e l'ID di un altro nodo definito *root*: le *nxn* righe rappresentano tutte le possibili combinazioni tra i nodi (funzione cartesian).  
-I valori invece conservano, per ogni coppia nodeID-root, gli ID dei nodi vicini alla proteina il cui ID è in chiave, la distanza tra il nodo e la root, il colore del nodo (status) e il percorso che collega il nodo alla root (path).  
-Il colore è WHITE se il record non è stato ancora considerato, GRAY se è considerato ma non ha concluso la fase di aggiornamento delle caratteristiche, BLACK se  è  stato elaborato e non verrà più preso in considerazione.  
-Di default la distanza è impostata pari a MAX, il colore WHITE e il path NULL. I record il cui ID del nodo è uguale all'ID della root la distanza è pari a 0 e il colore GRAY; questi saranno i nodi da cui l'algoritmo Forward-MR comincerà ad aggiornare i valori.  
-Se un record presenta un Node ID e una root che non sono collegati da nessun arco (si trovano in cluster diversi), l'Adjacency List conserverà i valori di default (dist = MAX, col = WHITE).  
+La chiave è composta dal nome del nodo e dal nome di un altro nodo definito *root*: le *nxn* righe rappresentano tutte le possibili combinazioni tra i nodi (funzione cartesian).  I valori invece conservano, per ogni coppia nodo-root, i nodi vicini alla proteina in chiave, la distanza tra il nodo e la root, il colore del nodo (status) e il percorso che collega il nodo alla root (path).  
+Il colore è WHITE se il record non è stato considerato, GRAY se è considerato ma non ha concluso la fase di aggiornamento delle caratteristiche, BLACK se è stato completamente aggiornato.  
+Di default la distanza è impostata pari a MAX, il colore WHITE e il path NULL. Nei record il cui nodo è uguale alla root la distanza è pari a 0 e il colore GRAY; questi saranno i nodi da cui l'algoritmo Forward-MR comincerà ad aggiornare i valori.  
+Se un record presenta un nodo e una root che non sono collegati da nessun arco (si trovano in cluster diversi), l'Adjacency List conserverà i valori di default (dist = MAX, col = WHITE).  
  
-I vicini sono stati trovati con il metodo [CalcolaVicini](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/CalcolaVicini.java), la cui logica è quella di duplicare ogni record degli archi che compongono il grafo invertendo NodeID e root, considerarli distinti e ridurli con ReduceByKey.
+I vicini sono stati trovati con il metodo [CalcolaVicini](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/CalcolaVicini.java), la cui logica è quella di duplicare ogni record invertendo NodeID e root, eliminare i record uguali e ridurli con ReduceByKey.
 Per tutti gli altri valori abbiamo eseguito un mapToPair:
 
 ```java
@@ -117,7 +117,7 @@ Successivamente l'algoritmo calcola per ogni arco il valore di **betweenness cen
 ```java
 Long totarchetti = archettiridotto.count();
 		 
-JavaPairRDD<Float,String> BCeOrdinato = archettiridotto.mapToPair(x->new Tuple2 ((float) x._2/totarchetti,x._1.split(",")[0] + " " + x._1.split(",")[1])).sortByKey(false);
+JavaPairRDD<Float,String> BCeOrdinato = archettiridotto.mapToPair(x->new Tuple2<Float,String>((float) x._2/totarchetti,x._1.split(",")[0] + " " + x._1.split(",")[1])).sortByKey(false);
 ```
 
 Si elimina l'arco con il valore di BC(e) maggiore, si aggiorna il dataset, si calcola l'indice Q e si ripete l'algoritmo. 
