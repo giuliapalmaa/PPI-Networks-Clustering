@@ -20,7 +20,7 @@ Il dataset Drosophila Melanogaster è composto da 284 nodi e 297 archi.
 
 ## Presentazione dei file
 
-Metodi | Contenuto 
+Metodi | Contenuto
 ------------ | -------------
 AccoppiaPath | Interfaccia che individua i singoli archi dei path
 CalcolaVicini | Interfaccia che trova i vicini dei nodi
@@ -30,21 +30,25 @@ EstrapolaNodi | Interfaccia che ricava i nodi distinti dagli archi
 MapForward | Interfaccia che implementa il MapForward
 ReduceForward | Interfaccia che implementa il ReduceForward
 
-Dataset Java | Contenuto
+Dataset | Contenuto
 ------------ | -------------
 DatasetGrande | Mus Musculus
 DatasetPiccolo | Drosophila Melanogaster
 
 
-Dataset Neo4J | Contenuto
------------- | -------------
-archiBest | file degli archi del dataset con miglire modularità 
-archiFirst | file degli archi del dataset iniziale
-archiLast | file degli archi del dataset all'ultima iterazione dell'algoritmo
-nodiFirsteBest | file dei nodi del dataset iniziale e con migliore modularità
-nodiLast |  file dei nodi del dataset all'ultima iterazione dell'algoritmo
 
 ## Preparazione file di input
+
+
+
+
+## Creazione Adjacency List
+
+L'algoritmo Clustering-MR lavora su una tabella composta da nxn righe (dove n è il numero di nodi distinti che compongono il grafo). 
+Questa tabella viene definita Adjacency List ed ogni record è registrato mediante una coppia Chiave,Valore. 
+La chiave è composta dall'ID del nodo e l'ID di un altro nodo definito come root, in totale le righe rappresentano tutte le possibili combinazioni tra i nodi (cartesian).
+I valori invece conservano, per ogni coppia nodeID-root, l'informazione degli ID dei nodi vicini alla proteina, la distanza tra il nodo e la root, il colore del nodo e il percorso che collega il nodo alla root (path).
+Di default la distanza è impostata pari a MAX, il colore WHITE e il path NULL. Per quanto riguarda i record che presentano l'ID del nodo uguale all'ID della root la distanza è pari a 0 e il colore GRAY, sarà proprio da questi nodi che il 
 
 
 
