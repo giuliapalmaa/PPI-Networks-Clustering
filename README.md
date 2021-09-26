@@ -85,7 +85,7 @@ La fase di reduce seleziona tra le diverse coppie (K,V) dei vicini che sono stat
 
 Successivamente l'algoritmo MR ricomincia dagli archi che sono grigi, così via fino a quando non sono più presenti record GRAY, ovvero fino a quando sono stati processati tutti i vicini dei vicini possibili per i root in parallelo. L'output finale è una tabella composta da nxn righe, come l' input iniziale, dove però è registrata la distanza minima e il path tra il NodeID e la Root.
 
-java
+```java
 do {
 
 	// Map
@@ -95,5 +95,5 @@ do {
 	finale = map.reduceByKey((x,y)->x +"_"+ y).mapToPair(new ReduceForward());
 		
 }while(finale.filter(x->x._2.split(" ")[2].equalsIgnoreCase("GRAY")).isEmpty() == false);
-
+```
 
