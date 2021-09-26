@@ -95,3 +95,16 @@ do {
 }while(finale.filter(x->x._2.split(" ")[2].equalsIgnoreCase("GRAY")).isEmpty() == false);
 ```
 
+## Backward-MR
+
+Il Backward-MR è un algoritmo che prende in input l'output del Forward-MR, il suo scopo è quello di determinare quanti shortest path passano per ogni arco del nostro grafo.  
+E' composto da una fase MAP in cui, per ogni riga, applicando il metodo AccoppiaPath() otteniamo in output il path del record frammentato in tutti gli archi che lo compongono, accompagnati dal valore 1.
+
+Nella fase Reduce l'algoritmo va a sommare per chiave i valori e restituisce come output ogni arco con il numero di volte in cui è presente nei path dell'adjacency list.
+
+java
+// Map
+JavaPairRDD<String,Integer> archetti = finale.flatMapToPair(new AccoppiaPath());
+
+// Reduce
+JavaPairRDD<String,Integer> archettiridotto = archetti.reduceByKey((x,y)-> x+y);
