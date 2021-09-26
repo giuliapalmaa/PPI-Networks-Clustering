@@ -55,12 +55,21 @@ I NodeID sono stati registrati mediante un metodo EstrapolaNodi, che va a regist
 I vicini sono stati calcolati con un metodo CalcolaVicini(), la logica è di duplicare ogni record degli archi che compongono il grafo invertendo NodeID e root, considerarli distinti e ridurli con ReduceByKey.
 Per tutti gli altri valori abbiamo eseguito un mapToPair.
 
+```java
+JavaRDD<String> nodi = proteine.flatMap(new EstrapolaNodi()).distinct();
+		
+		JavaPairRDD<String, String> nodiroot = nodi.cartesian(nodi);
+		
+		JavaPairRDD<String, String> vicini = proteine.flatMapToPair(new CalcolaVicini()).distinct().reduceByKey((x, y) -> (x + "," + y));
 
-
-
-
-
-
+		JavaPairRDD<String, Tuple2<String, String>> nodirootvicini = nodiroot.join(vicini);
+		
+		JavaPairRDD<String,String> finale = nodirootvicini.mapToPair(x-> {
+			if(x._1.equalsIgnoreCase(x._2._1))
+				return new Tuple2<String, String>(x._1 +" "+ x._2._1, x._2._2 +" "+ 0 +" "+ "GRAY" +" "+ "null");						
+			else return new Tuple2<String,String> (x._1 +" "+x._2._1 , x._2._2 +" "+ Integer.MAX_VALUE +" "+ "WHITE" +" "+ "null");		
+		});
+```
 
 
 
