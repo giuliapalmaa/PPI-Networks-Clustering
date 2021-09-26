@@ -30,12 +30,19 @@ EstrapolaNodi | Interfaccia che ricava i nodi distinti dagli archi
 MapForward | Interfaccia che implementa il MapForward
 ReduceForward | Interfaccia che implementa il ReduceForward
 
-Dataset | Contenuto
+Dataset Java | Contenuto
 ------------ | -------------
 DatasetGrande | Mus Musculus
 DatasetPiccolo | Drosophila Melanogaster
 
 
+Dataset Neo4J | Contenuto
+------------ | -------------
+archiBest | file degli archi del dataset con miglire modularità 
+archiFirst | file degli archi del dataset iniziale
+archiLast | file degli archi del dataset all'ultima iterazione dell'algoritmo
+nodiFirsteBest | file dei nodi del dataset iniziale e con migliore modularità
+nodiLast |  file dei nodi del dataset all'ultima iterazione dell'algoritmo
 
 ## Preparazione file di input
 
