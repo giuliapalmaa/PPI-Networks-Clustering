@@ -40,7 +40,7 @@ Il dataset Drosophila Melanogaster è composto da 284 nodi e 297 archi.
 [nodiBesteFirst](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/nodiBesteFirst.csv) | file con lista dei nodi del dataset iniziale e con migliore modularità
 [nodiLast](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/nodiLast.csv) | file con lista dei nodi del dataset all'ultima iterazione dell'algoritmo
 
-## Importazione dei file di input
+## Importazione dei file
 Per poter importare i dataset sia in *Java* sia in *Neo4J* sono state apportate delle modifiche ai file di partenza:  
 Su *Excel* abbiamo eliminato tutte le colonne diverse dai due nodi di interazione. Il risultato è una lista di archi con i nodi di interazione separati da uno spazio.  
 Per l'importazione in *Neo4J* i file sono stati trasformati in *csv*. Attraverso l'interfaccia [EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) abbiamo ottenuto la lista dei nodi che è richiesta, insieme alla lista degli archi, per la creazione del grafo in *Neo4J*
@@ -48,7 +48,7 @@ Per l'importazione in *Neo4J* i file sono stati trasformati in *csv*. Attraverso
 
 
 
-### Creazione Adjacency List
+## Creazione dei file di input: Adjacency List
 
 L'algoritmo Clustering-MR lavora su una tabella composta da *nxn* righe (dove n è il numero di nodi distinti che compongono il grafo). Questa tabella viene definita **Adjacency List** ed ogni record è registrato mediante una coppia Chiave,Valore.   
 La chiave è composta dal nome del nodo e dal nome di un altro nodo definito *root*: le *nxn* righe rappresentano tutte le possibili combinazioni tra i nodi (funzione cartesian).  I valori invece conservano, per ogni coppia nodo-root, i nodi vicini alla proteina in chiave, la distanza tra il nodo e la root, il colore del nodo (status) e il percorso che collega il nodo alla root (path).  
