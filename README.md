@@ -56,8 +56,7 @@ I valori invece conservano, per ogni coppia nodeID-root, l'informazione degli ID
 Di default la distanza è impostata pari a MAX, il colore WHITE e il path NULL. Per quanto riguarda i record che presentano l'ID del nodo uguale all'ID della root la distanza è pari a 0 e il colore GRAY, sarà proprio da questi nodi che l'algoritmo Forward-MR comincerà ad aggiornare i valori.  
 Il colore è WHITE se il record non è stato ancora considerato, GRAY se è considerato ma non ha concluso la fase di aggiornamento delle caratteristiche, BLACK se  è  stato elaborato e non verrà più preso in considerazione.  
 Se un record presenta un Node ID e una root che non sono collegati da nessun arco (si trovano in cluster diversi), l'Adjacency List conserverà i valori di default (dist = MAX, col = WHITE).  
-
-I NodeID sono stati registrati mediante un metodo EstrapolaNodi, che va a registrare ogni nodo che compare nel file di input, sia che si trovi nella prima che nella seconda colonna.  
+ 
 I vicini sono stati calcolati con un metodo CalcolaVicini(), la logica è di duplicare ogni record degli archi che compongono il grafo invertendo NodeID e root, considerarli distinti e ridurli con ReduceByKey.
 Per tutti gli altri valori abbiamo eseguito un mapToPair.
 
@@ -77,5 +76,24 @@ JavaPairRDD<String,String> finale = nodirootvicini.mapToPair(x-> {
 });
 ```
 
+## Forward-MR
+
+Il Forward-MR è un algoritmo che per ogni root in parallelo percorre ed aggiorna i valori (distanza, colore e path) di ogni nodo vicino.    
+Partendo dai record dove il NodeID è uguale al root, che sono inizializzati a GRAY, genera una coppia (K,V) per ogni vicino del nodo, in cui la distanza è la distanza del nodo madre + 1, il colore è GRAY e il path è composto dal path del nodo madre + il NodeID del nodo madre. Il colore della riga del nodo madre viene aggiornato in BLACK affinchè non venga più considerata nelle prossime mosse.
+
+La fase di reduce seleziona tra le diverse coppie (K,V) dei vicini che sono state generate quella dove la distanza è minima.
+
+Successivamente l'algoritmo MR ricomincia dagli archi che sono grigi, così via fino a quando non sono più presenti record GRAY, ovvero fino a quando sono stati processati tutti i vicini dei vicini possibili per i root in parallelo. L'output finale è una tabella composta da nxn righe, come l' input iniziale, dove però è registrata la distanza minima e il path tra il NodeID e la Root.
+
+java
+do {
+
+	// Map
+	JavaPairRDD<String, String> map = finale.flatMapToPair(new MapForward());
+		
+	// Reduce
+	finale = map.reduceByKey((x,y)->x +"_"+ y).mapToPair(new ReduceForward());
+		
+}while(finale.filter(x->x._2.split(" ")[2].equalsIgnoreCase("GRAY")).isEmpty() == false);
 
 
