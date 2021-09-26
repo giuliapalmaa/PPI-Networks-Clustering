@@ -112,7 +112,7 @@ JavaPairRDD<String,Integer> archettiridotto = archetti.reduceByKey((x,y)-> x+y);
 ```
 
 ## Edge-Betweenness e Modularità
-Successivamente l'algoritmo calcola per ogni arco il valore di **betweenness centrality**:
+Successivamente l'algoritmo calcola per ogni arco il valore di **betweenness centrality**, che ci dà una misura di centralità di ogni arco all'intero di un grafo:
 
 ```java
 Long totarchetti = archettiridotto.count();
