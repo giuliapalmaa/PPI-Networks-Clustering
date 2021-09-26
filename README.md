@@ -56,9 +56,9 @@ I valori invece conservano, per ogni coppia nodeID-root, l'informazione degli ID
 Di default la distanza è impostata pari a MAX, il colore WHITE e il path NULL. Per quanto riguarda i record che presentano l'ID del nodo uguale all'ID della root la distanza è pari a 0 e il colore GRAY, sarà proprio da questi nodi che l'algoritmo Forward-MR comincerà ad aggiornare i valori.  
 Il colore è WHITE se il record non è stato ancora considerato, GRAY se è considerato ma non ha concluso la fase di aggiornamento delle caratteristiche, BLACK se  è  stato elaborato e non verrà più preso in considerazione.  
 Se un record presenta un Node ID e una root che non sono collegati da nessun arco (si trovano in cluster diversi), l'Adjacency List conserverà i valori di default (dist = MAX, col = WHITE).  
+
 I NodeID sono stati registrati mediante un metodo EstrapolaNodi, che va a registrare ogni nodo che compare nel file di input, sia che si trovi nella prima che nella seconda colonna.  
 I vicini sono stati calcolati con un metodo CalcolaVicini(), la logica è di duplicare ogni record degli archi che compongono il grafo invertendo NodeID e root, considerarli distinti e ridurli con ReduceByKey.
-
 Per tutti gli altri valori abbiamo eseguito un mapToPair.
 
 ```java
