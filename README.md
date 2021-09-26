@@ -22,18 +22,18 @@ Il dataset Drosophila Melanogaster è composto da 284 nodi e 297 archi.
 
 Metodi | Contenuto
 ------------ | -------------
-AccoppiaPath | Interfaccia che 
-CalcolaVicini | Interfaccia che 
-ComputaCluster | Interfaccia che 
-DisaccoppiaNodi | Interfaccia che 
-EstrapolaNodi | Interfaccia che 
-MapForward | Interfaccia che 
-ReduceForward | Interfaccia che 
+AccoppiaPath | Interfaccia che individua i singoli archi dei path
+CalcolaVicini | Interfaccia che trova i vicini dei nodi
+ComputaCluster | Interfaccia che associa a ogni nodo il cluster di appartenenza
+DisaccoppiaNodi | Interfaccia che da ogni arco ricava i nodi dagli archi e ci associa il cluster
+EstrapolaNodi | Interfaccia che ricava i nodi distinti dagli archi
+MapForward | Interfaccia che implementa il MapForward
+ReduceForward | Interfaccia che implementa il ReduceForward
 
 Dataset | Contenuto
 ------------ | -------------
-DatasetGrande | Interfaccia che 
-DatasetPiccolo | Interfaccia che 
+DatasetGrande | Mus Musculus
+DatasetPiccolo | Drosophila Melanogaster
 
 
 
