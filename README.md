@@ -16,28 +16,28 @@ Il dataset Drosophila Melanogaster è composto da 284 nodi e 297 archi.
 
 ## Presentazione dei file
 
-Metodi | Contenuto
+[Metodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi) | Contenuto
 ------------ | -------------
-AccoppiaPath | Interfaccia che individua i singoli archi dei path
-CalcolaVicini | Interfaccia che trova i vicini dei nodi
-ComputaCluster | Interfaccia che associa a ogni nodo il cluster di appartenenza
-DisaccoppiaNodi | Interfaccia che da ogni arco ricava i nodi dagli archi e ci associa il cluster
-EstrapolaNodi | Interfaccia che ricava i nodi distinti dagli archi
-MapForward | Interfaccia che implementa il MapForward
-ReduceForward | Interfaccia che implementa il ReduceForward
+[AccoppiaPath](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/AccoppiaPath.java) | Interfaccia che individua i singoli archi dei path
+[CalcolaVicini](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/CalcolaVicini.java) | Interfaccia che trova i vicini dei nodi
+[ComputaCluster](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/ComputaCluster.java) | Interfaccia che associa a ogni nodo il cluster di appartenenza
+[DisaccoppiaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/DisaccoppiaNodi.java) | Interfaccia che da ogni arco ricava i nodi dagli archi e ci associa il cluster
+[EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) | Interfaccia che ricava i nodi distinti dagli archi
+[MapForward](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/MapForward.java) | Interfaccia che implementa il MapForward
+[ReduceForward](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/ReduceForward.java) | Interfaccia che implementa il ReduceForward
 
-Dataset Java| Contenuto
+[Dataset Java](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Java)| Contenuto
 ------------ | -------------
-DatasetGrande | Mus Musculus
-DatasetPiccolo | Drosophila Melanogaster
+[DatasetGrande](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Java/DatasetGrande.txt) | Mus Musculus
+[DatasetPiccolo](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Java/DatasetPiccolo.txt) | Drosophila Melanogaster
 
-Dataset Neo4J| Contenuto
+[Dataset Neo4J](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j)| Contenuto
 ------------ | -------------
 [archiBest](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/archiBest.csv) | file con lista degli archi del dataset con miglire modularità
-archiFirst | file con lista degli archi del dataset iniziale
-archiLast | file con lista degli archi del dataset all'ultima iterazione dell'algoritmo
-nodiBesteFirst | file con lista dei nodi del dataset iniziale e con migliore modularità
-nodiLast | file con lista dei nodi del dataset all'ultima iterazione dell'algoritmo
+[archiFirst](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/archiFirst.csv) | file con lista degli archi del dataset iniziale
+[archiLast](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/archiLast.csv) | file con lista degli archi del dataset all'ultima iterazione dell'algoritmo
+[nodiBesteFirst](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/nodiBesteFirst.csv) | file con lista dei nodi del dataset iniziale e con migliore modularità
+[nodiLast](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/nodiLast.csv) | file con lista dei nodi del dataset all'ultima iterazione dell'algoritmo
 
 
 
