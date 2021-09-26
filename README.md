@@ -87,7 +87,6 @@ Successivamente l'algoritmo MR ricomincia dagli archi che sono grigi, così via 
 
 ```java
 do {
-
 	// Map
 	JavaPairRDD<String, String> map = finale.flatMapToPair(new MapForward());
 		
