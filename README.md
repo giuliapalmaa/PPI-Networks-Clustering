@@ -40,12 +40,12 @@ Il dataset Drosophila Melanogaster è composto da 284 nodi e 297 archi.
 [nodiBesteFirst](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/nodiBesteFirst.csv) | file con lista dei nodi del dataset iniziale e con migliore modularità
 [nodiLast](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Dataset%20Neo4j/nodiLast.csv) | file con lista dei nodi del dataset all'ultima iterazione dell'algoritmo
 
-## Importazione
+## Importazione dei file di input
 Per poter importare i dataset sia in *Java* sia in *Neo4J* sono state apportate delle modifiche ai file di partenza:  
 Su *Excel* abbiamo eliminato tutte le colonne diverse dai due nodi di interazione. Il risultato è una lista di archi con i nodi di interazione separati da uno spazio.  
 Per l'importazione in *Neo4J* i file sono stati trasformati in *csv*. Attraverso l'interfaccia [EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) abbiamo ottenuto la lista dei nodi che è richiesta, insieme alla lista degli archi, per la creazione del grafo in *Neo4J*
 
-## Preparazione file di input
+
 
 
 ### Creazione Adjacency List
