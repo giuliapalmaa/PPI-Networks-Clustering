@@ -50,15 +50,14 @@ Per l'importazione in *Neo4J* i file sono stati trasformati in *csv*. Attraverso
 ### Creazione Adjacency List
 
 L'algoritmo Clustering-MR lavora su una tabella composta da *nxn* righe (dove n è il numero di nodi distinti che compongono il grafo). Questa tabella viene definita **Adjacency List** ed ogni record è registrato mediante una coppia Chiave,Valore.   
-La chiave è composta dall'ID del nodo e l'ID di un altro nodo definito *root*: le *nxn* righe rappresentano tutte le possibili combinazioni tra i nodi (cartesian).  
-I valori invece conservano, per ogni coppia nodeID-root, l'informazione degli ID dei nodi vicini alla proteina, la distanza tra il nodo e la root, il colore del nodo e il percorso che collega il nodo alla root (path).  
-
-Di default la distanza è impostata pari a MAX, il colore WHITE e il path NULL. Per quanto riguarda i record che presentano l'ID del nodo uguale all'ID della root la distanza è pari a 0 e il colore GRAY, sarà proprio da questi nodi che l'algoritmo Forward-MR comincerà ad aggiornare i valori.  
+La chiave è composta dall'ID del nodo e l'ID di un altro nodo definito *root*: le *nxn* righe rappresentano tutte le possibili combinazioni tra i nodi (funzione cartesian).  
+I valori invece conservano, per ogni coppia nodeID-root, gli ID dei nodi vicini alla proteina il cui ID è in chiave, la distanza tra il nodo e la root, il colore del nodo (status) e il percorso che collega il nodo alla root (path).  
 Il colore è WHITE se il record non è stato ancora considerato, GRAY se è considerato ma non ha concluso la fase di aggiornamento delle caratteristiche, BLACK se  è  stato elaborato e non verrà più preso in considerazione.  
+Di default la distanza è impostata pari a MAX, il colore WHITE e il path NULL. I record il cui ID del nodo è uguale all'ID della root la distanza è pari a 0 e il colore GRAY; questi saranno i nodi da cui l'algoritmo Forward-MR comincerà ad aggiornare i valori.  
 Se un record presenta un Node ID e una root che non sono collegati da nessun arco (si trovano in cluster diversi), l'Adjacency List conserverà i valori di default (dist = MAX, col = WHITE).  
  
-I vicini sono stati calcolati con un metodo CalcolaVicini(), la logica è di duplicare ogni record degli archi che compongono il grafo invertendo NodeID e root, considerarli distinti e ridurli con ReduceByKey.
-Per tutti gli altri valori abbiamo eseguito un mapToPair.
+I vicini sono stati trovati con il metodo [CalcolaVicini](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/CalcolaVicini.java), la cui logica è quella di duplicare ogni record degli archi che compongono il grafo invertendo NodeID e root, considerarli distinti e ridurli con ReduceByKey.
+Per tutti gli altri valori abbiamo eseguito un mapToPair:
 
 ```java
 JavaRDD<String> nodi = proteine.flatMap(new EstrapolaNodi()).distinct();
@@ -78,12 +77,12 @@ JavaPairRDD<String,String> finale = nodirootvicini.mapToPair(x-> {
 
 ## Forward-MR
 
-Il Forward-MR è un algoritmo che per ogni root in parallelo percorre ed aggiorna i valori (distanza, colore e path) di ogni nodo vicino.    
-Partendo dai record dove il NodeID è uguale al root, che sono inizializzati a GRAY, genera una coppia (K,V) per ogni vicino del nodo, in cui la distanza è la distanza del nodo madre + 1, il colore è GRAY e il path è composto dal path del nodo madre + il NodeID del nodo madre. Il colore della riga del nodo madre viene aggiornato in BLACK affinchè non venga più considerata nelle prossime mosse.
+Il Forward-MR è un algoritmo che partendo dalle root percorre ed aggiorna i valori (distanza, colore e path) in parallelo di ogni vicino del nodo in chiave.  
+I primi record toccati sono quelli dove il NodeID è uguale al root. L'algoritmo genera una coppia (K,V) per ogni vicino del nodo, in cui la distanza è la distanza del nodo madre + 1, il colore è GRAY e il path è composto dal path del nodo madre + il NodeID del nodo madre. Il colore della riga del nodo madre viene aggiornato in BLACK affinchè non venga più considerata nelle iterazioni successive.
 
 La fase di reduce seleziona tra le diverse coppie (K,V) dei vicini che sono state generate quella dove la distanza è minima.
 
-Successivamente l'algoritmo MR ricomincia dagli archi che sono grigi, così via fino a quando non sono più presenti record GRAY, ovvero fino a quando sono stati processati tutti i vicini dei vicini possibili per i root in parallelo. L'output finale è una tabella composta da nxn righe, come l' input iniziale, dove però è registrata la distanza minima e il path tra il NodeID e la Root.
+Successivamente l'algoritmo ricomincia dagli archi grigi, finché questi non sono più presenti, ovvero fino a quando sono stati processati tutti i vicini dei vicini possibili per i root in parallelo. L'output finale è una tabella composta da *nxn* righe, come l' input iniziale, dove però è registrata la distanza minima e il path tra il NodeID e la Root.
 
 ```java
 do {
