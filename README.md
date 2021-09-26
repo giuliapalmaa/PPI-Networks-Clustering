@@ -97,10 +97,10 @@ do {
 
 ## Backward-MR
 
-Il Backward-MR è un algoritmo che prende in input l'output del Forward-MR, il suo scopo è quello di determinare quanti shortest path passano per ogni arco del nostro grafo.  
-E' composto da una fase MAP in cui, per ogni riga, applicando il metodo AccoppiaPath() otteniamo in output il path del record frammentato in tutti gli archi che lo compongono, accompagnati dal valore 1.
+Il Backward-MR è un algoritmo che prende in input l'output del Forward-MR, e determina quanti shortest path passano per ogni arco del nostro grafo.  
+E' composto da una fase Map in cui si applica il metodo [AccoppiaPath](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/AccoppiaPath.java) per ottenere il path del record frammentato in tutti gli archi che lo compongono, accompagnati dalla frequenza 1.
 
-Nella fase Reduce l'algoritmo va a sommare per chiave i valori e restituisce come output ogni arco con il numero di volte in cui è presente nei path dell'adjacency list.
+Nella fase Reduce l'algoritmo va a sommare le frequenze dei record con la stessa chiave e restituisce ogni arco con il numero di volte in cui è presente nei path dell'adjacency list.
 
 java
 // Map
