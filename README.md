@@ -162,18 +162,28 @@ Per l'importazione in *Neo4J* i file *txt* sono stati trasformati in *csv*. Attr
 Sono stati caricati i file dei grafi sia del datset di partenza, sia del dataset che presenta il valore della migliore modularità, sia del dataset all'ultima iterazione.  
 
 ### Distanza e Shortest Path
-L'output del Forward MR è una lista di tutte le combinazioni dei nodi con annesse distanze e shortest path. Per verificare la correttezza di questi risultati abbiamo utilizzato la libreria *Graph Data Science*: 
+L'output del Forward MR è una lista di tutte le combinazioni dei nodi con annesse distanze e shortest path. Per verificare la correttezza di questi risultati abbiamo creato un "named graph" su cui abbiamo applicato un algoritmo presente nella libreria *Graph Data Science*: 
 
 
-```neo4j
-hscdbhscdhcd match return
-
+```sql
+CALL gds.alpha.allShortestPaths.stream
+({nodeProjection: 'Protein', relationshipProjection: 
+{INTERACTION: {type: 'INTERACTION' }}})
+YIELD sourceNodeId, targetNodeId, distance
+WITH sourceNodeId, targetNodeId, distance
+WHERE gds.util.isFinite(distance) = true
+MATCH (source:Protein) WHERE id(source) = sourceNodeId
+MATCH (target:Protein) WHERE id(target) = targetNodeId
+RETURN source.nodi AS source, target.nodi AS target, distance
 ```
+Con questa interrogazione otteniamo uno tra i percorsi più brevi e la distanza minima tra tutte le coppie di nodi.  
+Per controllare la distanza e il path più breve tra due nodi dati abbiamo utilizzato la query: 
 
-
-
-
-
+```sql
+MATCH (p:Protein {nodi: 'DIP-27777N'}),  (q:Protein {nodi: 'DIP-29672N'}),
+ ShortestPath=shortestPath((p)-[*]-(q))
+RETURN ShortestPath, length(ShortestPath)
+```
 
 
 
