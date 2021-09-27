@@ -175,7 +175,7 @@ MERGE (p1)-[:INTERACTION]-(p2)
 ```
 
 ### Distanza e Shortest Path
-L'output del Forward MR è una lista di tutte le combinazioni dei nodi con annesse distanze e shortest path. Per verificare la correttezza di questi risultati abbiamo creato un "named graph" su cui abbiamo applicato un algoritmo presente nella libreria *Graph Data Science*: 
+L'output del Forward MR è una lista di tutte le combinazioni dei nodi con annesse distanze e shortest path. Per verificare la correttezza di questi risultati abbiamo applicato un algoritmo presente nella libreria *Graph Data Science*: 
 
 
 ```sql
