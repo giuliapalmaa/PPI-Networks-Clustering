@@ -43,7 +43,7 @@ Il dataset Drosophila Melanogaster è composto da 284 nodi e 297 archi.
 ## Importazione dei file
 Per poter importare i dataset sia in *Java* sia in *Neo4J* sono state apportate delle modifiche ai file di partenza:  
 Su *Excel* abbiamo eliminato tutte le colonne diverse dai due nodi di interazione. Il risultato è una lista di archi con i nodi di interazione separati da uno spazio.  
-Per l'importazione in *Neo4J* i file sono stati trasformati in *csv*. Attraverso l'interfaccia [EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) abbiamo ottenuto la lista dei nodi che è richiesta, insieme alla lista degli archi, per la creazione del grafo in *Neo4J*
+
 
 
 
@@ -151,3 +151,36 @@ JavaPairRDD<String, String> assegnoClusterB = assegnoClusterA.join(passo3).mapTo
 ```
 
 L'algoritmo si interrompe quando le sue azioni diventano superflue, ovvero quando l'eliminazione dell'arco più attraversato restituisce un numero di cluster minore rispetto a quello del passaggio precedente. In una situazione di questo tipo ci troviamo di fronte ad un grafo strutturato in cluster composti da uno o due proteine l'uno.
+
+
+
+## Validazione risultati in Neo4J
+
+### Importazione dei file
+
+Per l'importazione in *Neo4J* i file *txt* sono stati trasformati in *csv*. Attraverso l'interfaccia [EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) abbiamo ottenuto la lista dei nodi che è richiesta, insieme alla lista degli archi, per la creazione del grafo in *Neo4J*.  
+Sono stati caricati i file dei grafi sia del datset di partenza, sia del dataset che presenta il valore della migliore modularità, sia del dataset all'ultima iterazione.  
+
+### Distanza e Shortest Path
+L'output del Forward MR è una lista di tutte le combinazioni dei nodi con annesse distanze e shortest path. Per verificare la correttezza di questi risultati abbiamo utilizzato la libreria *Graph Data Science*: 
+
+
+```neo4j
+hscdbhscdhcd match return
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
