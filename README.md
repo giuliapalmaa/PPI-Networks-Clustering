@@ -160,6 +160,19 @@ L'algoritmo si interrompe quando le sue azioni diventano superflue, ovvero quand
 
 Per l'importazione in *Neo4J* i file *txt* sono stati trasformati in *csv*. Attraverso l'interfaccia [EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) abbiamo ottenuto la lista dei nodi che è richiesta, insieme alla lista degli archi, per la creazione del grafo in *Neo4J*.  
 Sono stati caricati i file dei grafi sia del datset di partenza, sia del dataset che presenta il valore della migliore modularità, sia del dataset all'ultima iterazione.  
+Le query per l'importazione sono: 
+
+```sql
+LOAD CSV WITH HEADERS FROM 'file:///nodi.csv' AS row
+CREATE (p:Protein)
+SET p = row
+RETURN p
+```
+```sql
+LOAD CSV WITH HEADERS FROM 'file:///archi.csv' AS line 
+MATCH (p1:Protein {nodi:line.nodoA}), (p2:Protein {nodi:line.nodoB}) 
+MERGE (p1)-[:INTERACTION]-(p2)
+```
 
 ### Distanza e Shortest Path
 L'output del Forward MR è una lista di tutte le combinazioni dei nodi con annesse distanze e shortest path. Per verificare la correttezza di questi risultati abbiamo creato un "named graph" su cui abbiamo applicato un algoritmo presente nella libreria *Graph Data Science*: 
@@ -184,6 +197,48 @@ MATCH (p:Protein {nodi: 'DIP-27777N'}),  (q:Protein {nodi: 'DIP-29672N'}),
  ShortestPath=shortestPath((p)-[*]-(q))
 RETURN ShortestPath, length(ShortestPath)
 ```
+
+### Clustering
+
+Per verificare la correttezza dell'assegnazione dei cluster in Java abbiamo utilizzato l'algoritmo *Weakly Connected Components* della libreria *Graph Data Science*: 
+
+```sql
+CALL gds.wcc.stream({nodeProjection: 'Protein', 
+relationshipProjection: {INTERACTION: {type: 'INTERACTION' }}}')
+YIELD nodeId, componentId
+RETURN gds.util.asNode(nodeId).nodi AS Nodo, componentId
+ORDER BY componentId, Nodo
+```
+
+Con questa interrogazione otteniamo il cluster di appartenenza di ogni nodo.  
+Per assegnare una nuova etichetta con il cluster ai nodi nel grafo utilizziamo la query: 
+
+```sql
+CALL gds.wcc.write(
+{nodeProjection: 'Protein', relationshipProjection: {INTERACTION: {type: 'INTERACTION' }}}', { writeProperty: 'componentId' })
+YIELD nodePropertiesWritten, componentCount;
+```
+Così da poter controllare i nodi appartenenti a un cluster scelto con: 
+
+```sql
+MATCH n:Protein{componentID:'22'})
+RETURN n
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
