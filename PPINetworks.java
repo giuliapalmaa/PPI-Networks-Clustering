@@ -96,7 +96,7 @@ public class PPINetworks {
 				
 				
 		// BC(e)				
-		Long totarchetti = archettiridotto.count();
+		Long denominatore = finale.filter(x-> !x._2.split("")[2].equalsIgnoreCase("WHITE")&& x._1.split(" ")[0]!=x._1.split(" ")[1]).count();
 		
 		JavaPairRDD<Float,String> BCeOrdinato = archettiridotto.mapToPair(x->new Tuple2<Float,String>((float) x._2/totarchetti,x._1.split(",")[0] + " " + x._1.split(",")[1])).sortByKey(false);
 				
@@ -131,7 +131,7 @@ public class PPINetworks {
 
 
 				
-		// Indice modularit‡ Q
+		// Indice modularit√† Q
 		JavaPairRDD<String,Float> conta = assegnoClusterB.flatMapToPair(new ComputaCluster()).reduceByKey((x,y)-> x+y).sortByKey().mapToPair(x->{
 			if(x._1.contains(" "))
 				
