@@ -158,7 +158,7 @@ L'algoritmo si interrompe quando le sue azioni diventano superflue, ovvero quand
 
 ### Importazione dei file
 
-Per l'importazione in *Neo4J* i file *txt* sono stati trasformati in *csv*. Attraverso l'interfaccia [EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) abbiamo ottenuto la lista dei nodi che è richiesta, insieme alla lista degli archi, per la creazione del grafo in *Neo4J*.  
+Per l'importazione in *Neo4J* i file *txt* sono stati trasformati in *csv*. Attraverso il metodo [EstrapolaNodi](https://github.com/giuliapalmaa/Modularity-Optimization-for-PPI-Networks/blob/main/Metodi/EstrapolaNodi.java) abbiamo ottenuto la lista dei nodi che è richiesta, insieme alla lista degli archi, per la creazione del grafo in *Neo4J*.  
 Sono stati caricati i file dei grafi sia del datset di partenza, sia del dataset che presenta il valore della migliore modularità, sia del dataset all'ultima iterazione.  
 Le query per l'importazione sono: 
 
