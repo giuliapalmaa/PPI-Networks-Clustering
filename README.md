@@ -115,9 +115,10 @@ JavaPairRDD<String,Integer> archettiridotto = archetti.reduceByKey((x,y)-> x+y);
 Successivamente l'algoritmo calcola per ogni arco il valore di **betweenness centrality**, che ci dà una misura di centralità di ogni arco all'intero di un grafo:
 
 ```java
-Long totarchetti = archettiridotto.count();
+Long denominatore = finale.filter(x-> !x._2.split("")[2].equalsIgnoreCase("WHITE")&& x._1.split(" ")[0]!=x._1.split(" ")[1]).count();
 		 
-JavaPairRDD<Float,String> BCeOrdinato = archettiridotto.mapToPair(x->new Tuple2<Float,String>((float) x._2/totarchetti,x._1.split(",")[0] + " " + x._1.split(",")[1])).sortByKey(false);
+JavaPairRDD<Float,String> BCeOrdinato = archettiridotto.mapToPair(x->new Tuple2<Float,String>((float) x._2/denominatore,x._1.split(",")[0] + " " + x._1.split(",")[1])).sortByKey(false);
+
 ```
 
 Si elimina l'arco con il valore di BC(e) maggiore, si aggiorna il dataset, si calcola l'indice Q e si ripete l'algoritmo. 
